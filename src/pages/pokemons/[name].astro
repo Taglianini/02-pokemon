@@ -4,6 +4,7 @@ import MainLayout from "@layouts/MainLayout.astro";
 import PokemonCard from "@components/pokemons/pokemonCard.astro";
 import type { PokemonListResponse } from "@interfaces/pokemon-list.response";
 import Title from "@components/shared/Title.astro";
+import { Icon } from "astro-icon/components";
 
 export const getStaticPaths = (async() => {
      const resp = await fetch("https://pokeapi.co/api/v2/pokemon?limit=151");
@@ -26,12 +27,19 @@ const imageSrc = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprit
      image = {imageSrc}
      >
      <section class="mt-10 mx-10 flex flex-col justify-center items-center">
-     <div>
-          <button 
-          onclick="history.back()"
-          class="text-blue-300">Regresar
+     <div class="flex flex-row">
+          <div>
+               <button 
+                    onclick="history.back()"
+                    class="text-blue-300">Regresar
+               </button>
+                    <Title>{name}</Title>
+          </div>
+
+          <button id="btn-favorite" class="ml-4" data-name={name} data-id={id}>
+               <Icon name="heartfill" size={50} />
+               <Icon class="hidden" name="heartfull" size={50} />
           </button>
-          <Title>{name}</Title>
      </div>
      <PokemonCard name={name} url={url} isBig={true}/>
      <audio controls class="mt-5">
@@ -40,8 +48,34 @@ const imageSrc = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprit
      </audio>
      </section>
 </MainLayout>
+
+<script>
+     interface FavoritePokemon {
+          name: string;
+          id: number;
+     }
+
+     document.addEventListener("astro:page-load",()=>{
+          const btnFavorite = document.querySelector
+          ("#btn-favorite") as HTMLButtonElement;
+
+     if (!btnFavorite) return; 
+
+          const name = btnFavorite.dataset.name;
+          const id = btnFavorite.dataset.id;
+
+               btnFavorite.addEventListener("click", ()=>{
+                    console.log({name, id});
+               })   
+     })
+
+</script>
+
 <style>
      a{
           @apply hover:underline text-blue-400;
+     }
+     #btn-favorite{
+          @apply hover:animate-pulse 
      }
 </style>
