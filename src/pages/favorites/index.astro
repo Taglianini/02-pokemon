@@ -2,11 +2,8 @@
 import { Counter } from "@components/Counter";
 import Title from "@components/shared/Title.astro";
 import MainLayout from "@layouts/MainLayout.astro";
-
-
 ---
 <MainLayout title="Favoritos">
      <Title>Favoritos</Title>
-
-     <Counter client:only="solid-js"/>
+     <Counter transition:persist="counter" transition:persist-props client:visible initValue={15}/>
 </MainLayout>
